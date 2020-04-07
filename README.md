@@ -12,19 +12,16 @@ Music commands can be found at https://github.com/Awedtan/Botbot
 
 - node.js
 - npm
-- ffmpeg
 
 ### Installing npm packages
 
 - discord.js
-- ffmpeg (requires ffmpeg to already be installed)
-- fluent-ffmpeg
 - opus
 - say
 
 Navigate to the bot folder in command prompt and paste this:
 
-`npm install discord.js ffmpeg fluent-ffmpeg @discordjs/opus say --save`
+`npm install discord.js @discordjs/opus say --save`
 
 ### TTS voices
 
