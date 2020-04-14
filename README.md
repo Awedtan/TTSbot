@@ -16,12 +16,13 @@ Music commands can be found at https://github.com/Awedtan/Botbot
 ### Installing npm packages
 
 - discord.js
+- discord.js-commando
 - opus
 - say
 
 Navigate to the bot folder in command prompt and paste this:
 
-`npm install discord.js @discordjs/opus say --save`
+`npm install discord.js discord.js-commando @discordjs/opus say --save`
 
 ### TTS voices
 
