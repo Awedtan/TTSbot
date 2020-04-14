@@ -6,6 +6,8 @@ Has text-to-speech commands
 
 Music commands can be found at https://github.com/Awedtan/Botbot
 
+I might rewrite this bot with commando so don't get too comfortable with it
+
 # Installation
 
 ### Requirements
