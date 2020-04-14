@@ -1,20 +1,56 @@
-const { prefix, token } = require("./config.json");
-const config = require("./config.json");
-const fs = require("fs");
-const Discord = require("discord.js");
-const Client = require('./Client');
-const client = new Client();
+const { prefix, token, ownerid } = require("./config.json");
+const { CommandoClient } = require('discord.js-commando');
+const { Structures, Collection } = require('discord.js');
 const Say = require('say').Say;
 const say = new Say('win32');
+const path = require('path');
+const fs = require("fs");
 
-client.commands = new Discord.Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+Structures.extend('Guild', Guild => {
+	class TTSGuild extends Guild {
+		constructor(client, data) {
+			super(client, data);
+			this.voiceData = {
+				isPlaying: false,
+				connection: null,
+				dispatcher: null,
+				message: null,
+				voiceChannel: null,
+				queue: [],
+				voice: 'David',
+				volume: 5
+			};
 
-for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
-}
-console.log(client.commands);
+			this.commands = new Collection();
+
+			const commandCollection = fs.readdirSync('./commands/tts').filter(file => file.endsWith('.js'));
+
+			for (const file of commandCollection) {
+				const command = require(`./commands/tts/${file}`);
+				this.commands.set(command.name, command);
+			}
+
+			console.log(this.client.registry.findCommands(''.command, false, ''));
+		}
+	}
+	return TTSGuild;
+});
+
+const client = new CommandoClient({
+	commandPrefix: prefix,
+	owner: ownerid,
+	disableEveryone: true,
+});
+
+client.registry
+	.registerDefaultTypes()
+	.registerGroups([
+		['tts', 'TTS']
+	])
+	.registerDefaultGroups()
+	.registerDefaultCommands({ help: false })
+	.registerCommandsIn(path.join(__dirname, 'commands'))
+	;
 
 client.once("ready", () => {
 	say.getInstalledVoices((err, voices) => console.log(voices));
@@ -30,28 +66,6 @@ client.once("disconnect", () => {
 });
 
 client.on("message", async message => {
-	if (message.author.bot) return;
-
-	if (message.content.startsWith(`${prefix}`)) {
-		console.log();
-		console.log(`Received from ${message.author.username} in ${message.channel.name}: ${message.content}`);
-
-		const args = message.content.split(" ");
-		const commandName = args.shift().toLowerCase();
-		const command = client.commands.get(commandName);
-
-		try {
-			command.execute(message, client);
-		} catch (error) {
-			console.log("Command failure");
-			return message.channel.send(
-				":grey_question: Did you type that correctly?"
-			);
-		}
-	}
-	else {
-
-	}
 });
 
 client.login(token);
