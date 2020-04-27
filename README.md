@@ -2,7 +2,7 @@
 
 A 200% original discord.js bot rewritten in discord.js-commando
 
-Has text-to-speech commands
+Has text-to-speech and midi synthesizing commands
 
 Music commands can be found at https://github.com/Awedtan/Newbot
 
