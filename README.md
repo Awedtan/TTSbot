@@ -14,6 +14,7 @@ Disclaimer: I've modified my version of discord.js commando to stop the bot from
 
 - node.js
 - npm
+- ffmpeg
 
 ### Installing npm packages
 
