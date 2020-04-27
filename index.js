@@ -55,6 +55,7 @@ client.registry
 client.once("ready", () => {
 	say.getInstalledVoices((err, voices) => console.log(voices));
 	console.log("Ready!");
+	client.user.setActivity('Now on discord.js commando!');
 });
 
 client.once("reconnecting", () => {

@@ -1,16 +1,17 @@
 const { Command } = require('discord.js-commando');
+const owoify = require('owoify-js').default;
 const Say = require('say').Say;
 const say = new Say('win32');
 
-module.exports = class SpeakCommand extends Command {
+module.exports = class UwuCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: 'speak',
-			aliases: ['say'],
+			name: 'uwu',
+			aliases: ['owo'],
 			group: 'tts',
-			memberName: 'play',
-			description: 'TTSifies some text',
-			examples: ['speak [text]', 'speak hello world'],
+			memberName: 'uwu',
+			description: 'TTSifies some uwuified text',
+			examples: ['uwu [text]', 'uwu hello world'],
 			args: [
 				{
 					key: 'text',
@@ -38,7 +39,7 @@ module.exports = class SpeakCommand extends Command {
 				}
 			}
 
-			say.export(text, `Microsoft ${msg.guild.voiceData.voice} Desktop`, 0.75, `audio/tts.wav`, (err) => {
+			say.export(owoify(text, 'uvu'), `Microsoft ${msg.guild.voiceData.voice} Desktop`, 0.75, `audio/tts.wav`, (err) => {
 				if (err) {
 					console.log(err);
 					return;
@@ -57,7 +58,7 @@ module.exports = class SpeakCommand extends Command {
 				msg.guild.voiceData.dispatcher.setVolumeLogarithmic(msg.guild.voiceData.volume / 5);
 
 				console.log(`Speaking ${text}`);
-			}, 5000);
+			}, 4000);
 		} catch (err) {
 			msg.say(':pensive: Sorry, something went wrong');
 			console.log(err);
