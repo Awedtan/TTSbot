@@ -18,15 +18,25 @@ Structures.extend('Guild', Guild => {
 				voiceChannel: null,
 				queue: [],
 				voice: 'David',
-				volume: 5
+				volume: 2
 			};
 
 			this.commands = new Collection();
 
-			const commandCollection = fs.readdirSync('./commands/tts').filter(file => file.endsWith('.js'));
+			const singCommands = fs.readdirSync('./commands/sing').filter(file => file.endsWith('.js'));
+			const ttsCommands = fs.readdirSync('./commands/tts').filter(file => file.endsWith('.js'));
+			const miscCommands = fs.readdirSync('./commands/misc').filter(file => file.endsWith('.js'));
 
-			for (const file of commandCollection) {
+			for (const file of singCommands) {
+				const command = require(`./commands/sing/${file}`);
+				this.commands.set(command.name, command);
+			}
+			for (const file of ttsCommands) {
 				const command = require(`./commands/tts/${file}`);
+				this.commands.set(command.name, command);
+			}
+			for (const file of miscCommands) {
+				const command = require(`./commands/misc/${file}`);
 				this.commands.set(command.name, command);
 			}
 
@@ -45,7 +55,9 @@ const client = new CommandoClient({
 client.registry
 	.registerDefaultTypes()
 	.registerGroups([
-		['tts', 'TTS']
+		['tts', 'TTS'],
+		['sing', 'Sing'],
+		['misc', 'Misc']
 	])
 	.registerDefaultGroups()
 	.registerDefaultCommands({ help: false })

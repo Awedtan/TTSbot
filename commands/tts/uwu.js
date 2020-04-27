@@ -54,6 +54,9 @@ module.exports = class UwuCommand extends Command {
 
 				msg.guild.voiceData.dispatcher = msg.guild.voiceData.connection
 					.play(`audio/tts.wav`)
+					.on('finish', () => {
+						msg.guild.voiceData.isPlaying = false;
+					})
 					.on('error', error => console.error(error));
 				msg.guild.voiceData.dispatcher.setVolumeLogarithmic(msg.guild.voiceData.volume / 5);
 

@@ -6,7 +6,7 @@ module.exports = class HelpCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'help',
-			group: 'tts',
+			group: 'misc',
 			memberName: 'help',
 			description: 'Displays the help menu',
 			examples: ['help'],
@@ -25,7 +25,7 @@ module.exports = class HelpCommand extends Command {
 		try {
 			if (!text) {
 				const embed = new MessageEmbed()
-					.setTitle(`Help Menu`)
+					.setTitle(`Help`)
 					.setDescription(
 						`Current prefix: \`${prefix}\`\n\n` +
 						`TTS\n` +
@@ -49,7 +49,7 @@ module.exports = class HelpCommand extends Command {
 					}
 
 					const embed = new MessageEmbed()
-						.setTitle('Help Menu')
+						.setTitle('Help')
 						.setDescription(commands[0].name)
 						.addFields(
 							{ name: 'Description', value: commands[0].description, inline: false },
@@ -60,7 +60,7 @@ module.exports = class HelpCommand extends Command {
 				}
 				else {
 					const embed = new MessageEmbed()
-						.setTitle('Help Menu')
+						.setTitle('Help')
 						.setDescription(commands[0].name)
 						.addFields(
 							{ name: 'Description', value: commands[0].description, inline: false },
@@ -69,6 +69,7 @@ module.exports = class HelpCommand extends Command {
 					msg.embed(embed);
 				}
 			}
+			console.log(`Displayed help menu`);
 		} catch (err) {
 			msg.say(':pensive: Sorry, something went wrong');
 			console.log(err);
