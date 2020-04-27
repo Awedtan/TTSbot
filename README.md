@@ -17,14 +17,18 @@ Disclaimer: I've modified my version of discord.js commando to stop the bot from
 
 ### Installing npm packages
 
+- audioconcat
 - discord.js
 - discord.js-commando
+- fluent-ffmpeg
+- midi-writer-js
 - opus
 - say
+- synth-js
 
 Navigate to the bot folder in command prompt and paste this:
 
-`npm install discord.js discord.js-commando @discordjs/opus say --save`
+`npm install audioconcat discord.js discord.js-commando fluent-ffmpeg midi-writer-js @discordjs/opus say synth-js --save`
 
 ### TTS voices
 
