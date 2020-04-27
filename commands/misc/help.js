@@ -29,7 +29,9 @@ module.exports = class HelpCommand extends Command {
 					.setDescription(
 						`Current prefix: \`${prefix}\`\n\n` +
 						`TTS\n` +
-						`\`speak\`, \`voice\`, \`voice\`, \`leave\`\n\n` +
+						`\`speak\`, \`voice\`, \`voices\`, \`leave\`\n\n` +
+						`Sing\n` +
+						`\`sing\`, \`save\`, \`repertoire\`, \`notes\`, \`append\`\n\n` +
 						`Use \`help [command]\` for more information about a command`
 					)
 				msg.embed(embed);
