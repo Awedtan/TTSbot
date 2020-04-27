@@ -1,10 +1,10 @@
 # TTSbot
 
-A 200% original discord.js bot
+A 200% original discord.js bot rewritten in discord.js-commando
 
-Has text-to-speech commands
+Has text-to-speech and midi synthesizing commands
 
-Music commands can be found at https://github.com/Awedtan/Botbot
+Music commands can be found at https://github.com/Awedtan/Newbot
 
 Disclaimer: I've modified my version of discord.js commando to stop the bot from constantly pinging people. If something doesn't work properly let me know
 
@@ -14,6 +14,7 @@ Disclaimer: I've modified my version of discord.js commando to stop the bot from
 
 - node.js
 - npm
+- ffmpeg
 
 ### Installing npm packages
 
