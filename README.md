@@ -1,6 +1,6 @@
 # TTSbot
 
-A 200% original discord.js bot
+A 200% original discord.js bot rewritten in discord.js-commando
 
 Has text-to-speech commands
 
