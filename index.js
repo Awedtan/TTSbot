@@ -1,10 +1,9 @@
 const { prefix, token, ownerid } = require("./config.json");
 const { CommandoClient } = require('discord.js-commando');
-const { Structures, Collection } = require('discord.js');
+const { Structures } = require('discord.js');
 const Say = require('say').Say;
 const say = new Say('win32');
 const path = require('path');
-const fs = require("fs");
 
 Structures.extend('Guild', Guild => {
 	class TTSGuild extends Guild {
@@ -20,27 +19,6 @@ Structures.extend('Guild', Guild => {
 				voice: 'David',
 				volume: 2
 			};
-
-			this.commands = new Collection();
-
-			const singCommands = fs.readdirSync('./commands/sing').filter(file => file.endsWith('.js'));
-			const ttsCommands = fs.readdirSync('./commands/tts').filter(file => file.endsWith('.js'));
-			const miscCommands = fs.readdirSync('./commands/misc').filter(file => file.endsWith('.js'));
-
-			for (const file of singCommands) {
-				const command = require(`./commands/sing/${file}`);
-				this.commands.set(command.name, command);
-			}
-			for (const file of ttsCommands) {
-				const command = require(`./commands/tts/${file}`);
-				this.commands.set(command.name, command);
-			}
-			for (const file of miscCommands) {
-				const command = require(`./commands/misc/${file}`);
-				this.commands.set(command.name, command);
-			}
-
-			console.log(this.client.registry.findCommands(''.command, false, ''));
 		}
 	}
 	return TTSGuild;
