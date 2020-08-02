@@ -1,5 +1,7 @@
 # TTSbot
 
+Everything here is super outdated and shouldn't be listened to i will maybe fix later
+
 A 200% original discord.js bot rewritten in discord.js-commando
 
 Has text-to-speech and midi synthesizing commands
