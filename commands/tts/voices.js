@@ -43,7 +43,7 @@ module.exports = class VoicesCommand extends Command {
 				`\`Helena\` - Spanish\n`
 			);
 		} catch (err) {
-			msg.say(':pensive: Sorry, something went wrong');
+			msg.say('😔 Sorry, something went wrong');
 			console.log(err);
 		}
 	}

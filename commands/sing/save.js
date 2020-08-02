@@ -9,18 +9,14 @@ module.exports = class SaveCommand extends Command {
 			name: 'save',
 			group: 'sing',
 			memberName: 'save',
-			description: 'Saves a song to the repertoire list\n\n' +
-				'Format:\n' +
-				'save [name] [tempo] length(pitch)repeats\n\n' +
-				'Note length applies to the notes inside the next pair of brackets\n' +
-				'No flats, only sharps\n' +
-				'Invalid pitches will become rests',
-			examples: ['save Hot_Cross_Buns 120 4(e4,d4) 2(c4) 4(e4,d4) 2(c4) 8(c4,d4)4 4(e4,d4) 2(c4)'],
+			description: 'Saves a track as a song',
+			examples: ['save [name] [track]'],
 			args: [
 				{
 					key: 'text',
-					prompt: ':grey_question: You didn\'t give a song to save',
-					type: 'string'
+					prompt: ':grey_question: You didn\'t give anything to save',
+					type: 'string',
+					default: ''
 				}
 			],
 		});
@@ -28,49 +24,48 @@ module.exports = class SaveCommand extends Command {
 
 	async run(msg, { text }) {
 		try {
-			const voiceChannel = msg.member.voice.channel;
-			if (!voiceChannel) return msg.say('You need to be in a voice channel to use that');
+			if(!text) return;
+			
+			var args = text.split(' ');
+			var track;
 
-			const permissions = voiceChannel.permissionsFor(msg.client.user);
-			if (!permissions.has('CONNECT')) return msg.say('I don\'t have permission to join your voice channel');
-			if (!permissions.has('SPEAK')) return msg.say('I don\'t have permission to speak in your voice channel');
+			if (fs.existsSync(`audio/tracks/${args[0]}.txt`)) {
+				const path = `audio/tracks/${args[0]}.txt`;
+				const content = fs.readFileSync(path, 'utf-8');
+				const values = content.split(' ');
+				values.shift();
 
-			const args = text.split(" ");
-
-			if (fs.existsSync(`songs/saved/${args[0]}.wav`)) return msg.say('You can\'t overwrite an existing song');
-
-			var track = new MidiWriter.Track();
-			track.setTempo(args[1]);
-
-			for (var i = 2; i < args.length; i++) {
-				const values = args[i].split(/[(),]+/);
-
-				for (var j = 1; j < values.length - 1; j++) {
-					if (Number.isInteger(parseInt(values[values.length - 1]))) {
-						track.addEvent(new MidiWriter.NoteEvent({ pitch: [`${values[j]}`], duration: `${values[0]}`, repeat: `${parseInt(values[values.length - 1])}` }));
-					}
-					else {
-						track.addEvent(new MidiWriter.NoteEvent({ pitch: [`${values[j]}`], duration: `${values[0]}` }));
-					}
-				}
+				track = this.client.commands.get('createTrack').run(this.client, values);
+				fs.writeFileSync(`audio/sheets/${args[0]}.txt`, content);
 			}
-			var write = new MidiWriter.Writer(track);
-			write.saveMIDI(`songs/saved/${args[0]}`);
+			else {
+				msg.say('❌ Invalid track name');
+				return;
+			}
 
-			setTimeout(function () {
-				let midiBuffer = fs.readFileSync(`songs/saved/${args[0]}.mid`);
-				let wavBuffer = synth.midiToWav(midiBuffer).toBuffer();
-				fs.writeFileSync(`songs/saved/${args[0]}.wav`, wavBuffer, { encoding: 'binary' });
-				
-				fs.writeFileSync(`songs/saved/notes/${args[0]}.txt`, text);
+			const writer = new MidiWriter.Writer(track);
+			writer.saveMIDI(`audio/songs/${args[0]}`);
 
-				msg.say(`Saved ${args[0]} to the repertoire list`);
-				console.log(`Saved ${args[0]} to the repertoire list`);
+			await new Promise(resolve => setTimeout(resolve, 500));
 
-				fs.unlinkSync(`songs/saved/${args[0]}.mid`);
-			}, 2000);
+			const { exec } = require('child_process');
+			exec(`.\\timidity\\timidity.exe .\\audio\\songs\\${args[0]}.mid -Ow -A400`, (err, stdout, stderr) => {
+				if (err) {
+					console.log(err);
+					return;
+				}
+
+				console.log(`stdout: ${stdout}`);
+				console.log(`stderr: ${stderr}`);
+			});
+
+			await new Promise(resolve => setTimeout(resolve, 500));
+
+			msg.say(`Saved track as song \`${args[0]}\``);
+			console.log(`Saved track as song \`${args[0]}\``);
+			// fs.unlinkSync(`audio/songs/${args[0]}.mid`);
 		} catch (err) {
-			msg.say(err);
+			msg.say('😔 Sorry, something went wrong');
 			console.log(err);
 		}
 	}

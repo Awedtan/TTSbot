@@ -60,7 +60,7 @@ module.exports = class VoiceCommand extends Command {
 				return msg.say(`:x: That's not a valid voice`);
 			}
 		} catch (err) {
-			msg.say(':pensive: Sorry, something went wrong');
+			msg.say('😔 Sorry, something went wrong');
 			console.log(err);
 		}
 	}

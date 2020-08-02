@@ -31,7 +31,7 @@ module.exports = class LeaveCommand extends Command {
 				console.log('Leave failed (not in channel)');
 			}
 		} catch (err) {
-			msg.say(':pensive: Sorry, something went wrong');
+			msg.say('😔 Sorry, something went wrong');
 			console.log(err);
 		}
 	}

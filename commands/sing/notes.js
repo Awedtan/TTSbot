@@ -1,21 +1,21 @@
 const { Command } = require('discord.js-commando');
-const { MessageEmbed } = require('discord.js');
 const fs = require('fs');
 
 module.exports = class NotesCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'notes',
-			aliases: ['note', 'sheet'],
+			aliases: ['note', 'n'],
 			group: 'sing',
 			memberName: 'notes',
-			description: 'Displays the notes for a song',
-			examples: ['notes [song]', 'notes hotcrossbuns'],
+			description: 'Displays the notes in a track',
+			examples: ['notes [track]'],
 			args: [
 				{
 					key: 'text',
-					prompt: ':grey_question: You didn\'t say what song you wanted',
-					type: 'string'
+					prompt: ':grey_question: You didn\'t give anything to save',
+					type: 'string',
+					default: ''
 				}
 			],
 		});
@@ -23,19 +23,22 @@ module.exports = class NotesCommand extends Command {
 
 	async run(msg, { text }) {
 		try {
-			if (fs.existsSync(`songs/saved/notes/${text}.txt`)) {
-				const path = `songs/saved/notes/${text}.txt`;
+			if(!text) return;
+			
+			if (fs.existsSync(`audio/tracks/${text}.txt`)) {
+				const path = `audio/tracks/${text}.txt`;
 				const content = fs.readFileSync(path, 'utf-8');
-				msg.say(content);
+				if (content.length < 2000) {
+					msg.say(content);
+				}
+				else {
+					msg.channel.send({ files: [`audio/notes/${text}.txt`] });
+				}
 
 				console.log(`Displayed ${text}'s notes`);
 			}
-			else {
-				msg.say('The notes for that song don\'t exist');
-				console.log('Notes failed');
-			}
 		} catch (err) {
-			msg.say(':pensive: Sorry, something went wrong');
+			msg.say(err);
 			console.log(err);
 		}
 	}

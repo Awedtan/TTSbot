@@ -8,7 +8,7 @@ module.exports = class SpeakCommand extends Command {
 			name: 'speak',
 			aliases: ['say'],
 			group: 'tts',
-			memberName: 'play',
+			memberName: 'speak',
 			description: 'TTSifies some text',
 			examples: ['speak [text]', 'speak hello world'],
 			args: [
@@ -30,7 +30,8 @@ module.exports = class SpeakCommand extends Command {
 		if (!permissions.has('SPEAK')) return msg.say('I don\'t have permission to speak in your voice channel.');
 
 		try {
-			var punctuation = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~';
+			var punctuation = '"”()*+,-.<=>[\\]^_`{|}';
+			// var punctuation = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~';
 
 			for (var i = 0; i < text.length; i++) {
 				if (punctuation.indexOf(text.charAt(i)) != -1) {
@@ -45,24 +46,24 @@ module.exports = class SpeakCommand extends Command {
 				}
 			});
 
-			setTimeout(async function () {
-				msg.guild.voiceData.message = msg;
-				msg.guild.voiceData.queue.push();
-				msg.guild.voiceData.connection = await voiceChannel.join();
-				msg.guild.voiceData.voiceChannel = voiceChannel;
+			await new Promise(resolve => setTimeout(resolve, 3000));
 
-				msg.guild.voiceData.dispatcher = msg.guild.voiceData.connection
-					.play(`audio/tts.wav`)
-					.on('finish', () => {
-						msg.guild.voiceData.isPlaying = false;
-					})
-					.on('error', error => console.error(error));
-				msg.guild.voiceData.dispatcher.setVolumeLogarithmic(msg.guild.voiceData.volume / 5);
+			msg.guild.voiceData.message = msg;
+			msg.guild.voiceData.queue.push();
+			msg.guild.voiceData.connection = await voiceChannel.join();
+			msg.guild.voiceData.voiceChannel = voiceChannel;
 
-				console.log(`Speaking ${text}`);
-			}, 5000);
+			msg.guild.voiceData.dispatcher = msg.guild.voiceData.connection
+				.play(`audio/tts.wav`)
+				.on('finish', () => {
+					msg.guild.voiceData.isPlaying = false;
+				})
+				.on('error', error => console.error(error));
+			msg.guild.voiceData.dispatcher.setVolumeLogarithmic(msg.guild.voiceData.volume / 5);
+
+			console.log(`Speaking ${text}`);
 		} catch (err) {
-			msg.say(':pensive: Sorry, something went wrong');
+			msg.say('😔 Sorry, something went wrong');
 			console.log(err);
 		}
 	}
